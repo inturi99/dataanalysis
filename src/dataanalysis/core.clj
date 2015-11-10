@@ -23,7 +23,7 @@
   (GET "/lfpr" [] (rr/content-type
                    (rr/response  (db/get-lfpr))
                    "application/json; charset=utf-8"))
-  (GET "/lfpr/:type" [title]
+  (GET "/lfpr/:type" [type]
        (rr/content-type
         (rr/response  (db/get-lfpr-by-type {:type type}))
         "application/json; charset=utf-8"))
