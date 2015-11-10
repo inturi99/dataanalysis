@@ -28,6 +28,18 @@
         (rr/response  (db/get-lfpr-by-type {:type type}))
         "application/json; charset=utf-8"))
 
+  (GET "/wpr" [] (rr/content-type
+                  (rr/response  (db/get-wpr))
+                  "application/json; charset=utf-8"))
+
+  (GET "/umr" [] (rr/content-type
+                  (rr/response  (db/get-umr))
+                  "application/json; charset=utf-8"))
+  (GET "/pur" [] (rr/content-type
+                  (rr/response  (db/get-pur))
+                  "application/json; charset=utf-8"))
+
+
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))
 
