@@ -17,7 +17,8 @@
                  [secretary "1.2.3"]
                  [reagent "0.5.1"]
                  [yesql "0.5.1"]
-                 [com.cognitect/transit-cljs "0.8.225"]]
+                 [com.cognitect/transit-cljs "0.8.225"]
+                 [ring-cors "0.1.7"]]
 
   :plugins [[lein-ring "0.8.13"]
             [migratus-lein "0.1.7"]
