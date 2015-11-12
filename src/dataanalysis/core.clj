@@ -8,7 +8,8 @@
    [ring.util.response	:as rr]
    [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
    [compojure.response :refer [render]]
-   [clojure.java.io :as io])
+   [clojure.java.io :as io]
+   [ring.middleware.cors :refer [wrap-cors]])
   (:gen-class))
 
 (defn home
@@ -18,15 +19,19 @@
 
 (def content-type  "application/json; charset=utf-8")
 
+(defn lfpr-type [tstring]
+  (db/get-lfpr-by-type {:type tstring}))
+
 (defroutes app-routes
   (GET "/" [] home)
   (GET "/lfpr" [] (rr/content-type
                    (rr/response  (db/get-lfpr))
                    "application/json; charset=utf-8"))
+
   (GET "/lfpr/:type" [type]
        (rr/content-type
-        (rr/response  (db/get-lfpr-by-type {:type type}))
-        "application/json; charset=utf-8"))
+        (rr/response (lfpr-type type))
+        content-type))
 
   (GET "/wpr" [] (rr/content-type
                   (rr/response  (db/get-wpr))
@@ -46,6 +51,8 @@
 (def app
   (-> app-routes
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
+      (wrap-cors :access-control-allow-origin [#".*"]
+                 :access-control-allow-methods [:get :put :post :delete])
       (ring-json/wrap-json-body)
       (ring-json/wrap-json-response)))
 
