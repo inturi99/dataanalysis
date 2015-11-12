@@ -1,6 +1,6 @@
 -- name: get-lfpr
 -- get all labourforceparticipationrate .
-SELECT * from labourforceparticipationrate
+SELECT * from labourforceparticipationrate order by id
 
 --name: get-lfpr-by-type
 SELECT * from labourforceparticipationrate
