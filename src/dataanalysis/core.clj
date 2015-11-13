@@ -22,6 +22,13 @@
 (defn lfpr-type [tstring]
   (db/get-lfpr-by-type {:type tstring}))
 
+(defn lfpr-caste [tstring]
+  (db/get-lfpr-by-caste {:caste tstring}))
+
+(defn lfpr-caste-type [t1string t2String ]
+  (db/get-lfpr-by-casteandtype {:caste t1string :type t2String}))
+
+
 (defroutes app-routes
   (GET "/" [] home)
   (GET "/lfpr" [] (rr/content-type
@@ -32,6 +39,17 @@
        (rr/content-type
         (rr/response (lfpr-type type))
         content-type))
+
+  (GET "/lfpr/caste/:caste" [caste]
+       (rr/content-type
+        (rr/response (lfpr-caste caste))
+        content-type))
+
+  (GET "/lfpr/caste/:caste/:type" [caste type]
+       (rr/content-type
+        (rr/response (lfpr-caste-type caste type))
+        content-type))
+
 
   (GET "/wpr" [] (rr/content-type
                   (rr/response  (db/get-wpr))
