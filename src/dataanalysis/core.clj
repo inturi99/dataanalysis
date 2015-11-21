@@ -73,7 +73,12 @@
   (GET "/deca" [] (rr/content-type
                    (rr/response  (db/get-deca))
                    "application/json; charset=utf-8"))
-
+  (GET "/all" [] (rr/content-type
+                  (rr/response {:lfp (db/get-lfp)
+                                :wp (db/get-wp)
+                                :ump (db/get-ump)
+                                :decade (db/get-deca)})
+                  "application/json; charset=utf-8"))
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))
 
