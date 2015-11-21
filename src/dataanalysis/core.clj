@@ -70,7 +70,9 @@
   (GET "/ump" [] (rr/content-type
                   (rr/response  (db/get-ump))
                   "application/json; charset=utf-8"))
-
+  (GET "/deca" [] (rr/content-type
+                   (rr/response  (db/get-deca))
+                   "application/json; charset=utf-8"))
 
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))

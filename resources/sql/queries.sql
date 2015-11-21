@@ -31,3 +31,6 @@ SELECT * from workerpopulation order by id
 
 --name: get-ump
 SELECT * from unemployedpersons order by id
+
+--name: get-deca
+SELECT * from decadedata order by id
