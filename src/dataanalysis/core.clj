@@ -61,6 +61,15 @@
   (GET "/pur" [] (rr/content-type
                   (rr/response  (db/get-pur))
                   "application/json; charset=utf-8"))
+  (GET "/lfp" [] (rr/content-type
+                  (rr/response  (db/get-lfp))
+                  "application/json; charset=utf-8"))
+  (GET "/wp" [] (rr/content-type
+                 (rr/response  (db/get-wp))
+                 "application/json; charset=utf-8"))
+  (GET "/ump" [] (rr/content-type
+                  (rr/response  (db/get-ump))
+                  "application/json; charset=utf-8"))
 
 
   (route/resources "/static")

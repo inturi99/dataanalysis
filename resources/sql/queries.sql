@@ -22,3 +22,12 @@ WHERE caste = :caste
 --name: get-lfpr-by-casteandtype
 SELECT * from labourforceparticipationrate
 WHERE caste = :caste and type = :type order by id
+
+--name: get-lfp
+SELECT * from labourforcepopulation order by id
+
+--name: get-wp
+SELECT * from workerpopulation order by id
+
+--name: get-ump
+SELECT * from unemployedpersons order by id
