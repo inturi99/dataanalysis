@@ -24,13 +24,25 @@ SELECT * from labourforceparticipationrate
 WHERE caste = :caste and type = :type order by id
 
 --name: get-lfp
-SELECT * from labourforcepopulation order by id
+SELECT * from labourforcepopulation order by year
 
 --name: get-wp
-SELECT * from workerpopulation order by id
+SELECT * from workerpopulation order by year
 
 --name: get-ump
-SELECT * from unemployedpersons order by id
+SELECT * from unemployedpersons order by year
 
 --name: get-deca
 SELECT * from decadedata order by id
+
+--name: get-lfp1
+SELECT * from labourforcepopulation1 order by year
+
+--name: get-wp1
+SELECT * from workerpopulation1 order by year
+
+--name: get-ump1
+SELECT * from unemployedpersons1 order by year
+
+--name: get-deca1
+SELECT * from decadedata1 order by id

@@ -79,6 +79,12 @@
                                 :ump (db/get-ump)
                                 :decade (db/get-deca)})
                   "application/json; charset=utf-8"))
+  (GET "/all1" [] (rr/content-type
+                   (rr/response {:lfp (db/get-lfp1)
+                                 :wp (db/get-wp1)
+                                 :ump (db/get-ump1)
+                                 :decade (db/get-deca1)})
+                   "application/json; charset=utf-8"))
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))
 
