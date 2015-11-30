@@ -85,6 +85,11 @@
                                  :ump (db/get-ump1)
                                  :decade (db/get-deca1)})
                    "application/json; charset=utf-8"))
+
+  (GET "/totalpopulation" [] (rr/content-type
+                              (rr/response {:totalparameters (db/get-totalparameters)
+                                            :totalpopulation (db/get-totalpopulation)})
+                              "application/json; charset=utf-8"))
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))
 

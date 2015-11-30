@@ -46,3 +46,9 @@ SELECT * from unemployedpersons1 order by year
 
 --name: get-deca1
 SELECT * from decadedata1 order by id
+
+--name: get-totalparameters
+SELECT * from totalparameters
+
+--name: get-totalpopulation
+SELECT * from totalpopulation order by year
