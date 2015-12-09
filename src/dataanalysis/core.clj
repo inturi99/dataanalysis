@@ -104,5 +104,5 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (jetty/run-jetty app {:port 8091
+  (jetty/run-jetty app {:port 80
                         :join? false}))
