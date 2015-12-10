@@ -5,8 +5,8 @@
 (def conn
   {:classname "org.postgresql.Driver"
    :subprotocol "postgresql"
-   :subname "//venkat.cbcogojng2k3.ap-southeast-1.rds.amazonaws.com:5432/dataanalysis"
-   :user "venkat"
+   :subname "//localhost:5432/dataanalysis"
+   :user "postgres"
    :password "Design_20"})
 
 (defqueries "sql/queries.sql" {:connection conn})
