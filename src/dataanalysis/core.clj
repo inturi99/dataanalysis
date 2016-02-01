@@ -25,6 +25,13 @@
 (defn lfpr-caste [tstring]
   (db/get-lfpr-by-caste {:caste tstring}))
 
+(defn wpr-caste [tstring]
+  (db/get-wpr-by-caste {:caste tstring}))
+
+(defn umr-caste [tstring]
+  (db/get-umr-by-caste {:caste tstring}))
+
+
 (defn lfpr-caste-type [t1string t2String ]
   (db/get-lfpr-by-casteandtype {:caste t1string :type t2String}))
 
@@ -44,6 +51,21 @@
        (rr/content-type
         (rr/response (lfpr-caste caste))
         content-type))
+  (GET "/wpr/caste/:caste" [caste]
+       (rr/content-type
+        (rr/response (wpr-caste caste))
+        content-type))
+
+  (GET "/umr/caste/:caste" [caste]
+       (rr/content-type
+        (rr/response (umr-caste caste))
+        content-type))
+
+  (GET "/total/caste/:caste" [caste] (rr/content-type
+                                      (rr/response {:lfpr (lfpr-caste caste)
+                                                    :wpr (wpr-caste caste)
+                                                    :umr (umr-caste caste)})
+                                      "application/json; charset=utf-8"))
 
   (GET "/lfpr/caste/:caste/:type" [caste type]
        (rr/content-type
@@ -73,6 +95,10 @@
   (GET "/deca" [] (rr/content-type
                    (rr/response  (db/get-deca))
                    "application/json; charset=utf-8"))
+  (GET "/deca1" [] (rr/content-type
+                    (rr/response  (db/get-deca1))
+                    "application/json; charset=utf-8"))
+
   (GET "/all" [] (rr/content-type
                   (rr/response {:lfp (db/get-lfp)
                                 :wp (db/get-wp)
@@ -104,5 +130,5 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (jetty/run-jetty app {:port 8080
+  (jetty/run-jetty app {:port 8091
                         :join? false}))
