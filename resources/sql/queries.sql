@@ -19,6 +19,15 @@ SELECT * from proportionunemployed order by id
 SELECT * from labourforceparticipationrate
 WHERE caste = :caste
 
+--name: get-wpr-by-caste
+SELECT * from workerpopulationratio
+WHERE caste = :caste
+
+--name: get-umr-by-caste
+SELECT * from unemploymentrate
+WHERE caste = :caste
+
+
 --name: get-lfpr-by-casteandtype
 SELECT * from labourforceparticipationrate
 WHERE caste = :caste and type = :type order by id
