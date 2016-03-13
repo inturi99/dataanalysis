@@ -19,6 +19,17 @@
 
 (def content-type  "application/json; charset=utf-8")
 
+(defn calc-state-lfpr [cons estpop gencons gender statepop year]
+  {:year year :lfpr (int (+ cons (* estpop statepop) (* gencons gender)))})
+
+(defn state-lfpr [state gender year]
+  (let [se (first (db/get-state-parameterestimates {:state state}))
+        sp (db/get-statepopulation {:state state :year year
+                                    :gender gender})]
+    (map #(calc-state-lfpr (:constant se) (:population se)
+                           (:gender se) gender
+                           (:population %) (:year %)) sp)))
+
 (defn lfpr-type [tstring]
   (db/get-lfpr-by-type {:type tstring}))
 
@@ -116,6 +127,10 @@
                               (rr/response {:totalparameters (db/get-totalparameters)
                                             :totalpopulation (db/get-totalpopulation)})
                               "application/json; charset=utf-8"))
+  (GET "/statepopulation/lfpr/:state/:gender/:year" [state gender year]
+       (rr/content-type
+        (rr/response (state-lfpr state (read-string  gender)
+                                 (read-string year))) content-type))
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))
 

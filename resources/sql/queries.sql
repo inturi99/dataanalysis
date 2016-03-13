@@ -61,3 +61,10 @@ SELECT * from totalparameters
 
 --name: get-totalpopulation
 SELECT * from totalpopulation order by year
+
+
+--name: get-statepopulation
+SELECT * FROM statepopulation WHERE replace(state,' ','') = :state and year <= :year and gender = :gender
+
+--name: get-state-parameterestimates
+SELECT type,rate,state,constant,population,gender FROM parameterestimates WHERE replace(state,' ','') = :state
