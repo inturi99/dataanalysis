@@ -68,3 +68,6 @@ SELECT * FROM statepopulation WHERE replace(state,' ','') = :state and year <= :
 
 --name: get-state-parameterestimates
 SELECT type,rate,state,constant,population,gender FROM parameterestimates WHERE replace(state,' ','') = :state
+
+--name: get-statespopulation-year-allgender
+SELECT * FROM statepopulation WHERE replace(state,' ','') = :state and year = :year

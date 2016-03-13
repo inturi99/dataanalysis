@@ -19,16 +19,17 @@
 
 (def content-type  "application/json; charset=utf-8")
 
-(defn calc-state-lfpr [cons estpop gencons gender statepop year]
-  {:year year :lfpr (int (+ cons (* estpop statepop) (* gencons gender)))})
+(defn calc-state-lfpr [cons estpop gencons gender spp]
+  {:year (:year spp) :lfpr (cond (<= (:year spp) 2014) (:lfpr spp)
+                                 :else (int (+ cons (* estpop (:population spp)) (* gencons gender))))
+   :lfprpop (int (/ (* (:population spp) (int (+ cons (* estpop (:population spp)) (* gencons gender)))) 1000))
+   :statepop (:population spp)
+   :gender (:gender spp)})
 
-(defn state-lfpr [state gender year]
-  (let [se (first (db/get-state-parameterestimates {:state state}))
-        sp (db/get-statepopulation {:state state :year year
-                                    :gender gender})]
+(defn state-lfpr [state gender year statepopulation]
+  (let [se (first (db/get-state-parameterestimates {:state state}))]
     (map #(calc-state-lfpr (:constant se) (:population se)
-                           (:gender se) gender
-                           (:population %) (:year %)) sp)))
+                           (:gender se) (:gender %) %) statepopulation)))
 
 (defn lfpr-type [tstring]
   (db/get-lfpr-by-type {:type tstring}))
@@ -127,10 +128,19 @@
                               (rr/response {:totalparameters (db/get-totalparameters)
                                             :totalpopulation (db/get-totalpopulation)})
                               "application/json; charset=utf-8"))
+
   (GET "/statepopulation/lfpr/:state/:gender/:year" [state gender year]
        (rr/content-type
-        (rr/response (state-lfpr state (read-string  gender)
-                                 (read-string year))) content-type))
+        (rr/response {:lcdata  (state-lfpr state (read-string  gender)
+                                           (read-string year)
+                                           (db/get-statepopulation
+                                            {:state state :year (read-string year)
+                                             :gender (read-string  gender)}))
+                      :bardata (state-lfpr state (read-string gender)
+                                           (read-string year)
+                                           (db/get-statespopulation-year-allgender
+                                            {:state state :year (read-string year)}))})
+        content-type))
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))
 
