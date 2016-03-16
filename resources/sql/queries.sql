@@ -66,8 +66,8 @@ SELECT * from totalpopulation order by year
 --name: get-statepopulation
 SELECT * FROM statepopulation WHERE type = :type and replace(state,' ','') = :state and year <= :year and gender = :gender
 
---name: get-state-parameterestimates
-SELECT type,rate,state,constant,population,gender FROM parameterestimates WHERE type=:type and replace(state,' ','') = :state
+--name: get-state-parameterestimates-byrate
+SELECT type,rate,state,constant,population,gender FROM parameterestimates WHERE rate = :rate and type=:type and replace(state,' ','') = :state
 
 --name: get-statespopulation-year-allgender
 SELECT * FROM statepopulation WHERE type=:type and replace(state,' ','') = :state and year = :year

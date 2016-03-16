@@ -19,16 +19,34 @@
 
 (def content-type  "application/json; charset=utf-8")
 
-(defn calc-state-lfpr [cons estpop gencons gender spp]
+(defn calc-state-pop [constant estpop statepop gender-constant gender]
+  (int (+ constant (* estpop statepop) (* gender-constant gender))))
+
+(defn calc-state-lfpr [constant estpop gender-constant gender spp]
   {:year (:year spp) :lfpr (cond (<= (:year spp) 2014) (:lfpr spp)
-                                 :else (int (+ cons (* estpop (:population spp)) (* gencons gender))))
-   :lfprpop (int (/ (* (:population spp) (int (+ cons (* estpop (:population spp)) (* gencons gender)))) 1000))
+                                 :else (calc-state-pop constant estpop (:population spp)
+                                                       gender-constant gender))
+   :lfprpop (int (/ (* (:population spp) (calc-state-pop constant estpop (:population spp)
+                                                         gender-constant gender)) 1000))
+   :statepop (:population spp)
+   :gender (:gender spp)})
+
+(defn calc-state-wpr [constant estpop gender-constant gender spp]
+  {:year (:year spp) :wpr (cond (<= (:year spp) 2014) (:wpr spp)
+                                :else (calc-state-pop constant estpop (:population spp)
+                                                      gender-constant gender))
+   :wprpop (int (/ (* (:population spp) (calc-state-pop constant estpop (:population spp)
+                                                        gender-constant gender)) 1000))
    :statepop (:population spp)
    :gender (:gender spp)})
 
 (defn state-lfpr [state gender year statepopulation state-param-esti]
   (map #(calc-state-lfpr (:constant state-param-esti) (:population state-param-esti)
                          (:gender state-param-esti) (:gender %) %) statepopulation))
+
+(defn state-wfpr [state gender year statepopulation state-param-esti]
+  (map #(calc-state-wpr (:constant state-param-esti) (:population state-param-esti)
+                        (:gender state-param-esti) (:gender %) %) statepopulation))
 
 (defn lfpr-type [tstring]
   (db/get-lfpr-by-type {:type tstring}))
@@ -136,18 +154,44 @@
                                             {:state state :year (read-string year)
                                              :gender (read-string  gender)
                                              :type type})
-                                           (first (db/get-state-parameterestimates
+                                           (first (db/get-state-parameterestimates-byrate
                                                    {:state state
-                                                    :type type})))
+                                                    :type type
+                                                    :rate "LFPR"})))
                       :bardata (state-lfpr state (read-string gender)
                                            (read-string year)
                                            (db/get-statespopulation-year-allgender
                                             {:state state :year (read-string year)
                                              :type type})
-                                           (first (db/get-state-parameterestimates
+                                           (first (db/get-state-parameterestimates-byrate
                                                    {:state state
-                                                    :type type})))})
+                                                    :type type
+                                                    :rate "LFPR"})))})
         content-type))
+
+  (GET "/statepopulation/wpr/:state/:gender/:year/:type" [state gender year type]
+       (rr/content-type
+        (rr/response {:lcdata  (state-wfpr state (read-string  gender)
+                                           (read-string year)
+                                           (db/get-statepopulation
+                                            {:state state :year (read-string year)
+                                             :gender (read-string  gender)
+                                             :type type})
+                                           (first (db/get-state-parameterestimates-byrate
+                                                   {:state state
+                                                    :type type
+                                                    :rate "WPR"})))
+                      :bardata (state-wfpr state (read-string gender)
+                                           (read-string year)
+                                           (db/get-statespopulation-year-allgender
+                                            {:state state :year (read-string year)
+                                             :type type})
+                                           (first (db/get-state-parameterestimates-byrate
+                                                   {:state state
+                                                    :type type
+                                                    :rate "WPR"})))})
+        content-type))
+
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))
 
