@@ -33,7 +33,7 @@ INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, ge
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (18,	'UPS',	'LFPR',	'Meghalaya',	611.2133,	0.39783,	-252.141);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (19,	'UPS',	'LFPR',	'Mizoram',	623.4772,	0.89686,	-214.842);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (20,	'UPS',	'LFPR',	'Nagaland',	515.7602,	0.45503,	-241.552);
-INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (21,	'UPS',	'LFPR',	'Orissa',	488.1495,	0.05816,	-579.251);
+INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (21,	'UPS',	'LFPR',	'Odisha',	488.1495,	0.05816,	-579.251);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (22,	'UPS',	'LFPR',	'Punjab',	399.7249,	0.07561,	-523.6);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (23,	'UPS',	'LFPR',	'Rajasthan',	449.6058,	0.03153,	-481.366);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (24,	'UPS',	'LFPR',	'Sikkim',	588.5352,	2.11592,	-303.819);
@@ -70,7 +70,7 @@ INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, ge
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (54,	'UPSS',	'LFPR',	'Meghalaya',	          667.65086, 0.32159,	-203.61694);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (55,	'UPSS',	'LFPR',	'Mizoram',	            667.76727, 0.70161,	-167.65289);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (56,	'UPSS',	'LFPR',	'Nagaland',	            537.82764, 0.41338,	-219.48381);
-INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (57,	'UPSS',	'LFPR',	'Orissa',	              523.09993, 0.05254,	-523.03680);
+INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (57,	'UPSS',	'LFPR',	'Odisha',	              523.09993, 0.05254,	-523.03680);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (58,	'UPSS',	'LFPR',	'Punjab',	              406.48390, 0.07420,	-513.90667);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (59,	'UPSS',	'LFPR',	'Rajasthan',	          511.37376, 0.02562,	-391.08013);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (60,	'UPSS',	'LFPR',	'Sikkim',	              658.91044, 1.57044,	-224.96829);
@@ -107,7 +107,7 @@ INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, ge
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (90,  'UPS',	'WPR',	'Meghalaya',	      611.2133,	0.39783,	-252.141);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (91,  'UPS',	'WPR',	'Mizoram',	        623.4772,	0.89686,	-214.842);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (92,  'UPS',	'WPR',	'Nagaland',	        515.7602,	0.45503,	-241.552);
-INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (93,  'UPS',	'WPR',	'Orissa',	          488.1495,	0.05816,	-579.251);
+INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (93,  'UPS',	'WPR',	'Odisha',	          488.1495,	0.05816,	-579.251);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (94,  'UPS',	'WPR',	'Punjab',	          399.7249,	0.07561,	-523.6);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (95,  'UPS',	'WPR',	'Rajasthan',	      449.6058,	0.03153,	-481.366);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (96,  'UPS',	'WPR',	'Sikkim',	          588.5352,	2.11592,	-303.819);
@@ -144,7 +144,7 @@ INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, ge
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (126,	'UPSS',	'WPR',	'Meghalaya',	          667.65086, 0.32159,	-203.61694);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (127,	'UPSS',	'WPR',	'Mizoram',	            667.76727, 0.70161,	-167.65289);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (128,	'UPSS',	'WPR',	'Nagaland',	            537.82764, 0.41338,	-219.48381);
-INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (129,	'UPSS',	'WPR',	'Orissa',	              523.09993, 0.05254,	-523.03680);
+INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (129,	'UPSS',	'WPR',	'Odisha',	              523.09993, 0.05254,	-523.03680);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (130,	'UPSS',	'WPR',	'Punjab',	              406.48390, 0.07420,	-513.90667);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (131,	'UPSS',	'WPR',	'Rajasthan',	          511.37376, 0.02562,	-391.08013);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (132,	'UPSS',	'WPR',	'Sikkim',	              658.91044, 1.57044,	-224.96829);
@@ -161,4 +161,9 @@ INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, ge
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (143,	'UPSS',	'WPR',	'Lakshadweep',	        404.81757,	33.35713,	-592.27364);
 INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (144,	'UPSS',	'WPR',	'Puducherry',	          532.40759,	1.05618,	-385.18428);
 
+
+INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (145,	'UPS',	'LFPR', 'AllIndia', 630.7928,	0.01503, -324.497);
+INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (146,	'UPS',	'WPR', 'AllIndia', 630.7928,	0.01503, -324.497);
+INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (147,	'UPSS',	'LFPR', 'AllIndia', 630.7928,	0.01503, -324.497);
+INSERT INTO "parameterestimates"(id, type, rate, state, constant, population, gender)VALUES (148,	'UPSS',	'WPR', 'AllIndia', 630.7928,	0.01503, -324.497);
 
