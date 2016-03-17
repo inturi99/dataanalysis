@@ -23,29 +23,29 @@
   (int (Math/ceil v)))
 
 (defn calc-unemployment-ratio
-  ([lfprpop wrpop]  (rounded-value (* (/ (- lfprpop wrpop) lfprpop) 1000)))
-  ([lfprpop wrpop pop] (rounded-value (* (/ (- lfprpop wrpop) pop) 1000))))
+  ([lfprpop wrpop]  (* (/ (- lfprpop wrpop) lfprpop) 1000))
+  ([lfprpop wrpop pop] (* (/ (- lfprpop wrpop) pop) 1000)))
 
 (defn calc-state-pop [constant estpop statepop gender-constant gender]
-  (rounded-value (+ constant (* estpop statepop) (* gender-constant gender))))
+  (+ constant (* estpop statepop) (* gender-constant gender)))
 
 (defn calc-population [statepop constant
                        estpop gender-constant
                        gender]
-  (rounded-value (/ (* statepop
-                       (calc-state-pop constant estpop
-                                       statepop gender-constant
-                                       gender)) 1000)))
+  (/ (* statepop
+        (calc-state-pop constant estpop
+                        statepop gender-constant
+                        gender)) 1000))
 
 (defn calc-state-lfpr [constant estpop gender-constant gender spp]
   {:year (:year spp) :lfpr (cond (<= (:year spp) 2014) (:lfpr spp)
-                                 :else (calc-state-pop constant estpop
-                                                       (:population spp)
-                                                       gender-constant
-                                                       gender))
-   :lfprpop (calc-population (:population spp) constant
-                             estpop gender-constant
-                             gender)
+                                 :else (rounded-value (calc-state-pop constant estpop
+                                                                      (:population spp)
+                                                                      gender-constant
+                                                                      gender)))
+   :lfprpop (rounded-value (calc-population (:population spp) constant
+                                            estpop gender-constant
+                                            gender))
    :statepop (:population spp)
    :gender (:gender spp)})
 
@@ -53,11 +53,12 @@
 
 (defn calc-state-wpr [constant estpop gender-constant gender spp]
   {:year (:year spp) :wpr (cond (<= (:year spp) 2014) (:wpr spp)
-                                :else (calc-state-pop constant estpop (:population spp)
-                                                      gender-constant gender))
-   :wprpop (calc-population (:population spp) constant
-                             estpop gender-constant
-                             gender-constant)
+                                :else (rounded-value (calc-state-pop constant estpop
+                                                                     (:population spp)
+                                                                     gender-constant gender)))
+   :wprpop (rounded-value (calc-population (:population spp) constant
+                                           estpop gender-constant
+                                           gender))
    :statepop (:population spp)
    :gender (:gender spp)})
 
@@ -92,17 +93,15 @@
                       sspw (first (filter #(= (:rate %) "WPR") spe))
                       lfpr (get-unemp-pop sspl o)
                       wpr (get-unemp-pop sspw o)
-                      lfprpop (rounded-value
-                               (/ (* lfpr (:population o)) 1000))
-                      wprpop (rounded-value
-                              (/ (* wpr (:population o)) 1000))
+                      lfprpop (read-string (format "%.2f" (/ (* lfpr (:population o)) 1000)))
+                      wprpop (read-string (format "%.2f" (/ (* wpr (:population o)) 1000)))
                       upr  (calc-unemployment-ratio
                             lfprpop
                             wprpop)]
 
-                  {:upr upr
+                  {:upr (rounded-value upr)
                    :year (:year o)
-                   :statepop lfprpop
+                   :statepop (rounded-value  lfprpop)
                    :unemppersons (rounded-value
                                   (/ (* upr lfprpop) 1000))
                    :gender (:gender o)}))) sp))
@@ -111,23 +110,20 @@
   (map (fn [o] (if (<= (:year o) 2014)
                 {:year (:year o) :pur (:pur o)
                  :statepop (:population o)
-                 :unemppersons (rounded-value
-                                (/ (* (:pur o) (:population o))
-                                   1000))
+                 :unemppersons (rounded-value (/ (* (:pur o) (:population o))
+                                                 1000))
                  :gender (:gender o)
                  }
                 (let [sspl (first (filter #(= (:rate %) "LFPR") spe))
                       sspw (first (filter #(= (:rate %) "WPR") spe))
                       wpr (get-unemp-pop sspw o)
                       lfpr (get-unemp-pop sspl o)
-                      lfprpop (rounded-value
-                               (/ (* lfpr (:population o)) 1000))
-                      wprpop (rounded-value
-                              (/ (* wpr (:population o)) 1000))
+                      lfprpop (/ (* lfpr (:population o)) 1000)
+                      wprpop (/ (* wpr (:population o)) 1000)
                       pur (calc-unemployment-ratio lfprpop
                                                    wprpop
                                                    (:population o))]
-                  {:pur pur
+                  {:pur (rounded-value pur)
                    :year (:year o)
                    :statepop (:population o)
                    :unemppersons (rounded-value
