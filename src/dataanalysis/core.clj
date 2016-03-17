@@ -19,24 +19,45 @@
 
 (def content-type  "application/json; charset=utf-8")
 
+(defn rounded-value [v]
+  (int (Math/ceil v)))
+
+(defn calc-unemployment-ratio
+  ([lfprpop wrpop]  (rounded-value (* (/ (- lfprpop wrpop) lfprpop) 1000)))
+  ([lfprpop wrpop pop] (rounded-value (* (/ (- lfprpop wrpop) pop) 1000))))
+
 (defn calc-state-pop [constant estpop statepop gender-constant gender]
   (int (+ constant (* estpop statepop) (* gender-constant gender))))
 
+(defn calc-population [statepop constant
+                       estpop gender-constant
+                       gender]
+  (int (/ (* statepop
+             (calc-state-pop constant estpop
+                             statepop gender-constant
+                             gender)) 1000)))
+
 (defn calc-state-lfpr [constant estpop gender-constant gender spp]
   {:year (:year spp) :lfpr (cond (<= (:year spp) 2014) (:lfpr spp)
-                                 :else (calc-state-pop constant estpop (:population spp)
-                                                       gender-constant gender))
-   :lfprpop (int (/ (* (:population spp) (calc-state-pop constant estpop (:population spp)
-                                                         gender-constant gender)) 1000))
+                                 :else (calc-state-pop constant estpop
+                                                       (:population spp)
+                                                       gender-constant
+                                                       gender))
+   :lfprpop (calc-population (:population spp) constant
+                             estpop gender-constant
+                             gender)
    :statepop (:population spp)
    :gender (:gender spp)})
+
+
 
 (defn calc-state-wpr [constant estpop gender-constant gender spp]
   {:year (:year spp) :wpr (cond (<= (:year spp) 2014) (:wpr spp)
                                 :else (calc-state-pop constant estpop (:population spp)
                                                       gender-constant gender))
-   :wprpop (int (/ (* (:population spp) (calc-state-pop constant estpop (:population spp)
-                                                        gender-constant gender)) 1000))
+   :wprpop (calc-population (:population spp) constant
+                             estpop gender-constant
+                             gender-constant)
    :statepop (:population spp)
    :gender (:gender spp)})
 
@@ -47,6 +68,82 @@
 (defn state-wfpr [state gender year statepopulation state-param-esti]
   (map #(calc-state-wpr (:constant state-param-esti) (:population state-param-esti)
                         (:gender state-param-esti) (:gender %) %) statepopulation))
+
+(defn get-unemp-pop [stateest statepop]
+  (calc-state-pop (:constant stateest)
+                  (:population stateest)
+                  (:population statepop)
+                  (:gender stateest)
+                  (:gender statepop)))
+
+(defn calculate-unemp-pop [sp spe]
+  (map (fn [o] (if (<= (:year o) 2014)
+                {:year (:year o) :upr (:upr o)
+                 :statepop (rounded-value
+                            (/ (* (:population o)
+                                  (:lfpr o))
+                               1000))
+                 :unemppersons (rounded-value
+                                (/ (* (/ (* (:lfpr o) (:population o)) 1000)
+                                      (:upr o)) 1000))
+                 :gender (:gender o)
+                 }
+                (let [sspl (first (filter #(= (:rate %) "LFPR") spe))
+                      sspw (first (filter #(= (:rate %) "WPR") spe))
+                      lfpr (get-unemp-pop sspl o)
+                      lfprpop (rounded-value
+                               (/ (* lfpr (:population o)) 1000))]
+
+                  {:upr (calc-unemployment-ratio
+                         lfpr
+                         (get-unemp-pop sspw o))
+                   :year (:year o)
+                   :statepop lfprpop
+                   :unemppersons (rounded-value
+                                  (/ (* lfpr lfprpop) 1000))
+                   :gender (:gender o)}))) sp))
+
+(defn calculate-propunemp-pop [sp spe]
+  (map (fn [o] (if (<= (:year o) 2014)
+                {:year (:year o) :pur (:pur o)
+                 :statepop (:population o)
+                 :unemppersons (rounded-value
+                                (/ (* (:pur o) (:population o))
+                                   1000))
+                 :gender (:gender o)
+                 }
+                (let [sspl (first (filter #(= (:rate %) "LFPR") spe))
+                      sspw (first (filter #(= (:rate %) "WPR") spe))
+                      wpr (get-unemp-pop sspw o)
+                      pur (calc-unemployment-ratio (get-unemp-pop sspl o)
+                                                   wpr
+                                                   (:population o))]
+                  {:pur pur
+                   :year (:year o)
+                   :statepop (:population o)
+                   :unemppersons (rounded-value
+                                  (/ (* pur (:population o)) 1000))
+                   :gender (:gender o)}))) sp))
+
+(defn get-unemp-data [state gender year type
+                      statepopulation]
+  (let [spe (db/get-state-parameterestimates-bytype
+             {:state state :type type})
+        sp (db/get-statepopulation {:state state :year year
+                                    :gender gender
+                                    :type type})]
+    (calculate-unemp-pop statepopulation spe)))
+
+(defn get-propunemp-data [state gender year type
+                          statepopulation]
+  (let [spe (db/get-state-parameterestimates-bytype
+             {:state state :type type})
+        sp (db/get-statepopulation {:state state :year year
+                                    :gender gender
+                                    :type type})]
+    (calculate-propunemp-pop statepopulation spe)))
+
+
 
 (defn lfpr-type [tstring]
   (db/get-lfpr-by-type {:type tstring}))
@@ -191,6 +288,36 @@
                                                     :type type
                                                     :rate "WPR"})))})
         content-type))
+
+  (GET "/statepopulation/ur/:state/:gender/:year/:type" [state gender year type]
+       (rr/content-type (rr/response
+                         {:lcdata (get-unemp-data state (read-string gender)
+                                                  (read-string year) type
+                                                  (db/get-statepopulation {:state state
+                                                                           :year (read-string year)
+                                                                           :gender (read-string  gender)
+                                                                           :type type}))
+                          :bardata (get-unemp-data state (read-string gender)
+                                                   (read-string year) type
+                                                   (db/get-statespopulation-year-allgender {:state state
+                                                                                            :year (read-string year)
+                                                                                            :type type}))})
+                        content-type))
+
+  (GET "/statepopulation/pur/:state/:gender/:year/:type" [state gender year type]
+       (rr/content-type (rr/response
+                         {:lcdata (get-propunemp-data state (read-string gender)
+                                                  (read-string year) type
+                                                  (db/get-statepopulation {:state state
+                                                                           :year (read-string year)
+                                                                           :gender (read-string  gender)
+                                                                           :type type}))
+                          :bardata (get-propunemp-data state (read-string gender)
+                                                   (read-string year) type
+                                                   (db/get-statespopulation-year-allgender {:state state
+                                                                                            :year (read-string year)
+                                                                                            :type type}))})
+                        content-type))
 
   (route/resources "/static")
   (route/not-found "<h1>Page not found</h1>"))
